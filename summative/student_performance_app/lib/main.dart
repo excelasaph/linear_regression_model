@@ -43,7 +43,7 @@ class _PredictionPageState extends State<PredictionPage> {
   final _studyTimeController = TextEditingController();
   final _absencesController = TextEditingController();
 
-  // Selected values for dropdowns (mapped to numeric values)
+  // Selected values for dropdowns
   Map<String, int?> _dropdownValues = {
     "Age": null,
     "Gender": null,
@@ -114,7 +114,7 @@ class _PredictionPageState extends State<PredictionPage> {
   };
 
   Future<void> _predict() async {
-    final url = Uri.parse("https://student-performance-api-wknc.onrender.com/predict"); // Replace with your Render URL
+    final url = Uri.parse("https://your-api.onrender.com/predict"); // Replace with your Render URL
     try {
       // Check if all dropdowns are selected
       if (_dropdownValues.values.any((value) => value == null)) {
@@ -145,7 +145,7 @@ class _PredictionPageState extends State<PredictionPage> {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {
-          _result = "Predicted GPA: ${data['predicted_gpa'].toStringAsFixed(2)}";
+          _result = "Predicted GPA: ${data['predicted_gpa'].toStringAsFixed(2)}\nGrade: ${data['grade_class']}";
         });
       } else {
         setState(() {
@@ -208,7 +208,7 @@ class _PredictionPageState extends State<PredictionPage> {
             SizedBox(height: 20),
             ElevatedButton(onPressed: _predict, child: Text("Predict")),
             SizedBox(height: 20),
-            Text(_result, style: TextStyle(fontSize: 18)),
+            Text(_result, style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
           ],
         ),
       ),
