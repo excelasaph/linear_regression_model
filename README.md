@@ -1,31 +1,31 @@
 # Student GPA Prediction Project
 
-This repository contains my summative assignment for BSE Machine Learning and Mathematics for Machine Learning, deploying a linear regression model to predict student GPA using Flutter. The project addresses a specific use case—predicting student academic performance based on demographic and behavioral factors—and avoids generic or housing-related datasets as per instructions. It is structured into four tasks:
+This repository contains my summative assignment for BSE Mathematics for Machine Learning, deploying a linear regression model to predict student GPA using Flutter. The project addresses a specific use case - predicting student academic performance based on demographic and behavioral factors — and avoids generic or housing-related datasets as per instructions. It is structured into four tasks:
 
 - Task 1: Model training
 - Task 2: API development
 - Task 3: Flutter app creation
 - Task 4: Video demo
 
+## File Structure
+
 ```text
 linear_regression_model/
 ├── summative/
 │   ├── linear_regression/
-│   │   ├── multivariate.ipynb  # Task 1: Model training notebook
-│   │   ├── best_model.pkl      # Trained Linear Regression model
-│   │   ├── scaler.pkl          # Scaler for input normalization
+│   │   ├── multivariate.ipynb  
 │   ├── API/
-│   │   ├── main.py             # Task 2: FastAPI application
-│   │   ├── models.py           # Pydantic input model
-│   │   ├── prediction.py       # Prediction logic
-│   │   ├── best_model.pkl      # Copied model for API
-│   │   ├── scaler.pkl          # Copied scaler for API
-│   │   ├── requirements.txt    # API dependencies
-│   ├── FlutterApp/             # Task 3: Flutter project
+│   │   ├── main.py             
+│   │   ├── models.py           
+│   │   ├── prediction.py       
+│   │   ├── best_model.pkl      
+│   │   ├── scaler.pkl          
+│   │   ├── requirements.txt    
+│   ├── FlutterApp/             
 │   │   ├── lib/
-│   │   │   ├── main.dart       # Flutter app code
-│   │   ├── pubspec.yaml        # Flutter dependencies
-├── README.md                   # Project documentation
+│   │   │   ├── main.dart       
+│   │   ├── pubspec.yaml        
+├── README.md                   
 ```
 
 ## Mission
