@@ -38,7 +38,7 @@ Enhance student academic success by predicting GPA based on key factors, enablin
 
 **Visualizations**:
 1. **Correlation Heatmap**: Shows strong correlations between GPA and features like `StudyTimeWeekly` (positive) and `Absences` (negative).
-2. **Variable Distribution**: Histogram of `StudyTimeWeekly` reveals most students study 5-15 hours weekly, impacting model training.
+2. **GPA Distribution**: Histogram of `GPA` reveals most students have GPAs between 2.5 and 3.5, reflecting typical academic performance and influencing model training
 
 ---
 
