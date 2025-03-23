@@ -2,7 +2,7 @@
 
 This repository contains my summative assignment for BSE Machine Learning and Mathematics for Machine Learning, deploying a linear regression model to predict student GPA using Flutter. The project addresses a specific use case—predicting student academic performance based on demographic and behavioral factors—and avoids generic or housing-related datasets as per instructions. It is structured into four tasks: model training (Task 1), API development (Task 2), Flutter app creation (Task 3), and a video demo (Task 4).
 
----
+```text
 linear_regression_model/
 ├── summative/
 │   ├── linear_regression/
@@ -21,7 +21,7 @@ linear_regression_model/
 │   │   │   ├── main.dart       # Flutter app code
 │   │   ├── pubspec.yaml        # Flutter dependencies
 ├── README.md                   # Project documentation
----
+```
 
 ## Mission
 
