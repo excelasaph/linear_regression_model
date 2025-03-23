@@ -1,4 +1,3 @@
-# summative/API/models.py
 from pydantic import BaseModel, Field
 
 class StudentInput(BaseModel):

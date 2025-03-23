@@ -1,4 +1,3 @@
-# summative/API/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from models import StudentInput
@@ -6,13 +5,12 @@ from prediction import predict_grade
 
 app = FastAPI(title="Student GPA Prediction API")
 
-# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins (adjust for production)
+    allow_origins=["*"],  
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods (e.g., POST)
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],  
+    allow_headers=["*"],  
 )
 
 @app.post("/predict")

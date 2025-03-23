@@ -1,4 +1,3 @@
-# summative/API/prediction.py
 import joblib
 import numpy as np
 from fastapi import HTTPException
@@ -32,13 +31,10 @@ def predict_grade(data):
             data.Extracurricular, data.Sports, data.Music, data.Volunteering
         ]).reshape(1, -1)
 
-        # Scale the input data
         input_data_scaled = scaler.transform(input_data)
 
-        # Make prediction
         prediction = float(model.predict(input_data_scaled)[0])
 
-        # Get GradeClass based on predicted GPA
         grade_class = get_grade_class(prediction)
 
         return {
