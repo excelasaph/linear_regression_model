@@ -86,6 +86,7 @@ Enhance student academic success by predicting GPA based on key factors, enablin
 ### Deployment
 - **Platform**: Render
 - **Public URL**: [https://student-performance-api-wknc.onrender.com/docs](https://student-performance-api-wknc.onrender.com/docs)
+- **API Endpoint**: [https://student-performance-api-wknc.onrender.com/predict](https://student-performance-api-wknc.onrender.com/predict)
 - **Instructions**:
   1. Pushed `summative/API/` to GitHub.
   2. Deployed on Render:
