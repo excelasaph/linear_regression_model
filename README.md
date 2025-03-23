@@ -30,7 +30,7 @@ linear_regression_model/
 
 ## Mission
 
-**Mission**: Enhance student academic success by predicting GPA based on key factors, enabling targeted interventions for at-risk students.
+Enhance student academic success by predicting GPA based on key factors, enabling targeted interventions for at-risk students.
 
 **Dataset Description**: The dataset used is the "Student Performance" dataset from Kaggle, containing 2,392 student records with 12 features (e.g., Age, Gender, StudyTimeWeekly, Absences) and GPA as the target variable. It’s rich in volume (thousands of rows) and variety (demographic, academic, and extracurricular variables), sourced from [Kaggle: Student Performance](https://www.kaggle.com/datasets/rabieelkharoua/students-performance-dataset).
 
@@ -93,6 +93,7 @@ linear_regression_model/
   3. Verified Swagger UI at `/docs`.
 
 ### Example Request
+
 ```json
 {
   "Age": 16,
@@ -108,16 +109,53 @@ linear_regression_model/
   "Music": 1,
   "Volunteering": 0
 }
-## Project Structure
+```
 
+### Response
 
-## API Endpoint
-- URL: `https://your-api.onrender.com/docs` (test via Swagger UI)
+```json
+{
+  "predicted_gpa": 3.75,
+  "grade_class": "A",
+  "grade_value": 0
+}
+```
 
-## Video Demo
-- YouTube: 
+## Task 3: Flutter App
 
-## How to Run the Flutter App
+### Description
+- **Directory**: `summative/FlutterApp/`
+- **Objective**: Build a mobile app to interact with the Task 2 API.
+- **Features**:
+  - Two pages: Home (welcome screen) and Prediction.
+  - 12 input fields (10 dropdowns, 2 text fields for `StudyTimeWeekly` and `Absences`).
+  - "Predict" button.
+  - Output display showing GPA and grade, or error messages.
+  - Modern white theme with organized layout (no overlap).
+
+### UI Details
+- **Home Page**: "Student GPA Predictor" title and a small, round "Start Predicting" button.
+- **Prediction Page**:
+  - Dropdowns for categorical inputs (e.g., `Age: 15-18`, `Gender: Male/Female`).
+  - Text fields for numeric inputs.
+  - Output displays:
+    - GPA and grade in color-coded text (A: dark green, B: light green, C: yellow, D: orange, F: deep red).
+    - Errors in red (e.g., "Please select all dropdown options.").
+
+### Running Locally
 1. Navigate to `summative/FlutterApp/`.
-2. Run `flutter pub get` to install dependencies.
-3. Run `flutter run` to launch the app on an emulator or device.
+2. Install dependencies:
+   ```bash
+   flutter pub get
+   ```
+3. Run the app:
+   ```bash
+   flutter run
+   ```
+
+## Task 4: Video Demo
+
+### Description
+- **Link**: [YouTube Video URL](https://youtube.com/your-video-link) *(Replace with actual link)*
+- **Duration**: ~5 minutes
+
