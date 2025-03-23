@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,6 +12,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Student GPA Predictor",
+      theme: ThemeData(
+        primaryColor: Color(0xFF1E88E5),
+        scaffoldBackgroundColor: Colors.white,
+        textTheme: GoogleFonts.poppinsTextTheme().copyWith(
+          bodyLarge: TextStyle(color: Colors.black87),
+          bodyMedium: TextStyle(color: Colors.black54),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xFF1E88E5),
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            elevation: 3,
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+          ),
+        ),
+      ),
       home: HomePage(),
     );
   }
@@ -20,13 +38,33 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Student GPA Predictor")),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => PredictionPage()));
-          },
-          child: Text("Go to Prediction"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Student GPA Predictor",
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => PredictionPage()),
+                );
+              },
+              child: Text("Start Predicting", style: TextStyle(fontSize: 16)),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -39,11 +77,9 @@ class PredictionPage extends StatefulWidget {
 }
 
 class _PredictionPageState extends State<PredictionPage> {
-  // Controllers for numeric fields
   final _studyTimeController = TextEditingController();
   final _absencesController = TextEditingController();
 
-  // Selected values for dropdowns
   Map<String, int?> _dropdownValues = {
     "Age": null,
     "Gender": null,
@@ -58,8 +94,8 @@ class _PredictionPageState extends State<PredictionPage> {
   };
 
   String _result = "";
+  Color _resultColor = Colors.black87; // Default color
 
-  // Dropdown options mapped to their numeric values
   final Map<String, List<Map<String, dynamic>>> _dropdownOptions = {
     "Age": [
       {"display": "15 years", "value": 15},
@@ -114,16 +150,46 @@ class _PredictionPageState extends State<PredictionPage> {
   };
 
   Future<void> _predict() async {
-    final url = Uri.parse("https://student-performance-api-wknc.onrender.com/predict");
-    try {
-      // Check if all dropdowns are selected
-      if (_dropdownValues.values.any((value) => value == null)) {
-        setState(() {
-          _result = "Error: Please select all dropdown options.";
-        });
-        return;
-      }
+    final url = Uri.parse("https://student-performance-api-wknc.onrender.com/predict"); 
+    List<String> errors = [];
 
+    if (_dropdownValues.values.any((value) => value == null)) {
+      setState(() {
+        _result = "Please select all dropdown options.";
+        _resultColor = Colors.red;
+      });
+      return;
+    }
+
+    double? studyTime;
+    try {
+      studyTime = double.parse(_studyTimeController.text);
+      if (studyTime < 0 || studyTime > 20) {
+        errors.add("Study Time Weekly must be between 0 and 20 hours.");
+      }
+    } catch (e) {
+      errors.add("Invalid Study Time Weekly: Enter a number (e.g., 10.5).");
+    }
+
+    int? absences;
+    try {
+      absences = int.parse(_absencesController.text);
+      if (absences < 0 || absences > 30) {
+        errors.add("Absences must be between 0 and 30.");
+      }
+    } catch (e) {
+      errors.add("Invalid Absences: Enter a whole number (e.g., 5).");
+    }
+
+    if (errors.isNotEmpty) {
+      setState(() {
+        _result = errors.join("\n• ");
+        _resultColor = Colors.red;
+      });
+      return;
+    }
+
+    try {
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
@@ -132,8 +198,8 @@ class _PredictionPageState extends State<PredictionPage> {
           "Gender": _dropdownValues["Gender"],
           "Ethnicity": _dropdownValues["Ethnicity"],
           "ParentalEducation": _dropdownValues["ParentalEducation"],
-          "StudyTimeWeekly": double.parse(_studyTimeController.text),
-          "Absences": int.parse(_absencesController.text),
+          "StudyTimeWeekly": studyTime,
+          "Absences": absences,
           "Tutoring": _dropdownValues["Tutoring"],
           "ParentalSupport": _dropdownValues["ParentalSupport"],
           "Extracurricular": _dropdownValues["Extracurricular"],
@@ -144,61 +210,141 @@ class _PredictionPageState extends State<PredictionPage> {
       );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        String gradeClass = data['grade_class'];
         setState(() {
-          _result = "Predicted GPA: ${data['predicted_gpa'].toStringAsFixed(2)}\nGrade: ${data['grade_class']}";
+          _result = "Predicted GPA: ${data['predicted_gpa'].toStringAsFixed(2)}\nGrade: $gradeClass";
+          // Assign color based on GradeClass
+          switch (gradeClass) {
+            case 'A':
+              _resultColor = Colors.green[700]!; // Dark green for success
+              break;
+            case 'B':
+              _resultColor = Colors.green[400]!; // Light green
+              break;
+            case 'C':
+              _resultColor = Colors.yellow[700]!; // Yellow
+              break;
+            case 'D':
+              _resultColor = Colors.orange[700]!; // Orange
+              break;
+            case 'F':
+              _resultColor = Colors.red[900]!; // Deep red for failure
+              break;
+            default:
+              _resultColor = Colors.black87; // Fallback
+          }
         });
       } else {
         setState(() {
-          _result = "Error: ${response.body}";
+          _result = "API Error: ${response.body}";
+          _resultColor = Colors.red;
         });
       }
     } catch (e) {
       setState(() {
-        _result = "Error: $e";
+        _result = "Network Error: $e";
+        _resultColor = Colors.red;
       });
     }
   }
 
   Widget _buildDropdown(String key, String label) {
-    return DropdownButtonFormField<int>(
-      decoration: InputDecoration(labelText: label),
-      value: _dropdownValues[key],
-      items: _dropdownOptions[key]!.map((option) {
-        return DropdownMenuItem<int>(
-          value: option["value"],
-          child: Text(option["display"]),
-        );
-      }).toList(),
-      onChanged: (value) {
-        setState(() {
-          _dropdownValues[key] = value;
-        });
-      },
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: DropdownButtonFormField<int>(
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.black54),
+          border: InputBorder.none,
+        ),
+        dropdownColor: Colors.white,
+        style: TextStyle(color: Colors.black87),
+        value: _dropdownValues[key],
+        items: _dropdownOptions[key]!.map((option) {
+          return DropdownMenuItem<int>(
+            value: option["value"],
+            child: Text(option["display"]),
+          );
+        }).toList(),
+        onChanged: (value) {
+          setState(() {
+            _dropdownValues[key] = value;
+          });
+        },
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.black54),
+          border: InputBorder.none,
+        ),
+        style: TextStyle(color: Colors.black87),
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Predict GPA")),
+      appBar: AppBar(
+        title: Text("Predict GPA"),
+        backgroundColor: Colors.white,
+        elevation: 2,
+        titleTextStyle: TextStyle(color: Colors.black87, fontSize: 20, fontWeight: FontWeight.bold),
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Text(
+              "Enter Student Details",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20),
             _buildDropdown("Age", "Age"),
             _buildDropdown("Gender", "Gender"),
             _buildDropdown("Ethnicity", "Ethnicity"),
             _buildDropdown("ParentalEducation", "Parental Education"),
-            TextField(
-              controller: _studyTimeController,
-              decoration: InputDecoration(labelText: "Study Time Weekly (0-20 hours)"),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-            ),
-            TextField(
-              controller: _absencesController,
-              decoration: InputDecoration(labelText: "Absences (0-30)"),
-              keyboardType: TextInputType.number,
-            ),
+            _buildTextField(_studyTimeController, "Study Time Weekly (0-20 hours)"),
+            _buildTextField(_absencesController, "Absences (0-30)"),
             _buildDropdown("Tutoring", "Tutoring"),
             _buildDropdown("ParentalSupport", "Parental Support"),
             _buildDropdown("Extracurricular", "Extracurricular Activities"),
@@ -206,12 +352,39 @@ class _PredictionPageState extends State<PredictionPage> {
             _buildDropdown("Music", "Music"),
             _buildDropdown("Volunteering", "Volunteering"),
             SizedBox(height: 20),
-            ElevatedButton(onPressed: _predict, child: Text("Predict")),
+            ElevatedButton(
+              onPressed: _predict,
+              child: Text("Predict", style: TextStyle(fontSize: 16)),
+            ),
             SizedBox(height: 20),
-            Text(_result, style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Text(
+                _result,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: _resultColor, // Use dynamic color
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 }
+
+
+// https://student-performance-api-wknc.onrender.com/predict
