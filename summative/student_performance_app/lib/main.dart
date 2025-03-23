@@ -94,7 +94,7 @@ class _PredictionPageState extends State<PredictionPage> {
   };
 
   String _result = "";
-  Color _resultColor = Colors.black87; // Default color
+  Color _resultColor = Colors.black87; 
 
   final Map<String, List<Map<String, dynamic>>> _dropdownOptions = {
     "Age": [
@@ -385,6 +385,3 @@ class _PredictionPageState extends State<PredictionPage> {
     );
   }
 }
-
-
-// https://student-performance-api-wknc.onrender.com/predict
