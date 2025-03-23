@@ -78,7 +78,7 @@ linear_regression_model/
 
 ### Deployment
 - **Platform**: Render
-- **Public URL**: [https://student-gpa-api.onrender.com/docs](https://student-performance-api-wknc.onrender.com/docs)
+- **Public URL**: [https://student-performance-api-wknc.onrender.com/docs](https://student-performance-api-wknc.onrender.com/docs)
 - **Instructions**:
   1. Pushed `summative/API/` to GitHub.
   2. Deployed on Render:
