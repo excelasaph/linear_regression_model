@@ -1,6 +1,11 @@
 # Student GPA Prediction Project
 
-This repository contains my summative assignment for BSE Machine Learning and Mathematics for Machine Learning, deploying a linear regression model to predict student GPA using Flutter. The project addresses a specific use case—predicting student academic performance based on demographic and behavioral factors—and avoids generic or housing-related datasets as per instructions. It is structured into four tasks: model training (Task 1), API development (Task 2), Flutter app creation (Task 3), and a video demo (Task 4).
+This repository contains my summative assignment for BSE Machine Learning and Mathematics for Machine Learning, deploying a linear regression model to predict student GPA using Flutter. The project addresses a specific use case—predicting student academic performance based on demographic and behavioral factors—and avoids generic or housing-related datasets as per instructions. It is structured into four tasks:
+
+- Task 1: Model training
+- Task 2: API development
+- Task 3: Flutter app creation
+- Task 4: Video demo
 
 ```text
 linear_regression_model/
