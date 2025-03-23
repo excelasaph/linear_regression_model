@@ -114,7 +114,7 @@ class _PredictionPageState extends State<PredictionPage> {
   };
 
   Future<void> _predict() async {
-    final url = Uri.parse("https://your-api.onrender.com/predict"); // Replace with your Render URL
+    final url = Uri.parse("https://student-performance-api-wknc.onrender.com/predict");
     try {
       // Check if all dropdowns are selected
       if (_dropdownValues.values.any((value) => value == null)) {
