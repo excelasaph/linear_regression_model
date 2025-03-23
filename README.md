@@ -124,6 +124,8 @@ Enhance student academic success by predicting GPA based on key factors, enablin
 }
 ```
 
+---
+
 ## Task 3: Flutter App
 
 ### Description
@@ -151,4 +153,6 @@ Enhance student academic success by predicting GPA based on key factors, enablin
 ### Description
 - **Link**: [YouTube Video URL](https://youtube.com/your-video-link) *(Replace with actual link)*
 - **Duration**: ~5 minutes
+
+---
 
