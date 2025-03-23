@@ -39,41 +39,107 @@ class PredictionPage extends StatefulWidget {
 }
 
 class _PredictionPageState extends State<PredictionPage> {
-  final _controllers = {
-    "Age": TextEditingController(),
-    "Gender": TextEditingController(),
-    "Ethnicity": TextEditingController(),
-    "ParentalEducation": TextEditingController(),
-    "StudyTimeWeekly": TextEditingController(),
-    "Absences": TextEditingController(),
-    "Tutoring": TextEditingController(),
-    "ParentalSupport": TextEditingController(),
-    "Extracurricular": TextEditingController(),
-    "Sports": TextEditingController(),
-    "Music": TextEditingController(),
-    "Volunteering": TextEditingController(),
+  // Controllers for numeric fields
+  final _studyTimeController = TextEditingController();
+  final _absencesController = TextEditingController();
+
+  // Selected values for dropdowns (mapped to numeric values)
+  Map<String, int?> _dropdownValues = {
+    "Age": null,
+    "Gender": null,
+    "Ethnicity": null,
+    "ParentalEducation": null,
+    "Tutoring": null,
+    "ParentalSupport": null,
+    "Extracurricular": null,
+    "Sports": null,
+    "Music": null,
+    "Volunteering": null,
   };
+
   String _result = "";
 
+  // Dropdown options mapped to their numeric values
+  final Map<String, List<Map<String, dynamic>>> _dropdownOptions = {
+    "Age": [
+      {"display": "15 years", "value": 15},
+      {"display": "16 years", "value": 16},
+      {"display": "17 years", "value": 17},
+      {"display": "18 years", "value": 18},
+    ],
+    "Gender": [
+      {"display": "Male", "value": 0},
+      {"display": "Female", "value": 1},
+    ],
+    "Ethnicity": [
+      {"display": "Caucasian", "value": 0},
+      {"display": "African American", "value": 1},
+      {"display": "Asian", "value": 2},
+      {"display": "Other", "value": 3},
+    ],
+    "ParentalEducation": [
+      {"display": "None", "value": 0},
+      {"display": "High School", "value": 1},
+      {"display": "Some College", "value": 2},
+      {"display": "Bachelor's", "value": 3},
+      {"display": "Higher", "value": 4},
+    ],
+    "Tutoring": [
+      {"display": "No", "value": 0},
+      {"display": "Yes", "value": 1},
+    ],
+    "ParentalSupport": [
+      {"display": "None", "value": 0},
+      {"display": "Low", "value": 1},
+      {"display": "Moderate", "value": 2},
+      {"display": "High", "value": 3},
+      {"display": "Very High", "value": 4},
+    ],
+    "Extracurricular": [
+      {"display": "No", "value": 0},
+      {"display": "Yes", "value": 1},
+    ],
+    "Sports": [
+      {"display": "No", "value": 0},
+      {"display": "Yes", "value": 1},
+    ],
+    "Music": [
+      {"display": "No", "value": 0},
+      {"display": "Yes", "value": 1},
+    ],
+    "Volunteering": [
+      {"display": "No", "value": 0},
+      {"display": "Yes", "value": 1},
+    ],
+  };
+
   Future<void> _predict() async {
-    final url = Uri.parse("https://student-performance-api-wknc.onrender.com/predict"); 
+    final url = Uri.parse("https://student-performance-api-wknc.onrender.com/predict"); // Replace with your Render URL
     try {
+      // Check if all dropdowns are selected
+      if (_dropdownValues.values.any((value) => value == null)) {
+        setState(() {
+          _result = "Error: Please select all dropdown options.";
+        });
+        return;
+      }
+
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
-          "Age": int.parse(_controllers["Age"]!.text),
-          "Gender": int.parse(_controllers["Gender"]!.text),
-          "Ethnicity": int.parse(_controllers["Ethnicity"]!.text),
-          "ParentalEducation": int.parse(_controllers["ParentalEducation"]!.text),
-          "StudyTimeWeekly": double.parse(_controllers["StudyTimeWeekly"]!.text),
-          "Absences": int.parse(_controllers["Absences"]!.text),
-          "Tutoring": int.parse(_controllers["Tutoring"]!.text),
-          "ParentalSupport": int.parse(_controllers["ParentalSupport"]!.text),
-          "Extracurricular": int.parse(_controllers["Extracurricular"]!.text),
-          "Sports": int.parse(_controllers["Sports"]!.text),
-          "Music": int.parse(_controllers["Music"]!.text),
-          "Volunteering": int.parse(_controllers["Volunteering"]!.text),
+          "Age": _dropdownValues["Age"],
+          "Gender": _dropdownValues["Gender"],
+          "Ethnicity": _dropdownValues["Ethnicity"],
+          "ParentalEducation": _dropdownValues["ParentalEducation"],
+          "StudyTimeWeekly": double.parse(_studyTimeController.text),
+          "Absences": int.parse(_absencesController.text),
+          "Tutoring": _dropdownValues["Tutoring"],
+          "ParentalSupport": _dropdownValues["ParentalSupport"],
+          "Extracurricular": _dropdownValues["Extracurricular"],
+          "Sports": _dropdownValues["Sports"],
+          "Music": _dropdownValues["Music"],
+          "Volunteering": _dropdownValues["Volunteering"],
         }),
       );
       if (response.statusCode == 200) {
@@ -93,6 +159,24 @@ class _PredictionPageState extends State<PredictionPage> {
     }
   }
 
+  Widget _buildDropdown(String key, String label) {
+    return DropdownButtonFormField<int>(
+      decoration: InputDecoration(labelText: label),
+      value: _dropdownValues[key],
+      items: _dropdownOptions[key]!.map((option) {
+        return DropdownMenuItem<int>(
+          value: option["value"],
+          child: Text(option["display"]),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          _dropdownValues[key] = value;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,18 +185,26 @@ class _PredictionPageState extends State<PredictionPage> {
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(controller: _controllers["Age"], decoration: InputDecoration(labelText: "Age (15-18)"), keyboardType: TextInputType.number),
-            TextField(controller: _controllers["Gender"], decoration: InputDecoration(labelText: "Gender (0: Male, 1: Female)"), keyboardType: TextInputType.number),
-            TextField(controller: _controllers["Ethnicity"], decoration: InputDecoration(labelText: "Ethnicity (0-3)"), keyboardType: TextInputType.number),
-            TextField(controller: _controllers["ParentalEducation"], decoration: InputDecoration(labelText: "Parental Education (0-4)"), keyboardType: TextInputType.number),
-            TextField(controller: _controllers["StudyTimeWeekly"], decoration: InputDecoration(labelText: "Study Time Weekly (0-20)"), keyboardType: TextInputType.numberWithOptions(decimal: true)),
-            TextField(controller: _controllers["Absences"], decoration: InputDecoration(labelText: "Absences (0-30)"), keyboardType: TextInputType.number),
-            TextField(controller: _controllers["Tutoring"], decoration: InputDecoration(labelText: "Tutoring (0: No, 1: Yes)"), keyboardType: TextInputType.number),
-            TextField(controller: _controllers["ParentalSupport"], decoration: InputDecoration(labelText: "Parental Support (0-4)"), keyboardType: TextInputType.number),
-            TextField(controller: _controllers["Extracurricular"], decoration: InputDecoration(labelText: "Extracurricular (0: No, 1: Yes)"), keyboardType: TextInputType.number),
-            TextField(controller: _controllers["Sports"], decoration: InputDecoration(labelText: "Sports (0: No, 1: Yes)"), keyboardType: TextInputType.number),
-            TextField(controller: _controllers["Music"], decoration: InputDecoration(labelText: "Music (0: No, 1: Yes)"), keyboardType: TextInputType.number),
-            TextField(controller: _controllers["Volunteering"], decoration: InputDecoration(labelText: "Volunteering (0: No, 1: Yes)"), keyboardType: TextInputType.number),
+            _buildDropdown("Age", "Age"),
+            _buildDropdown("Gender", "Gender"),
+            _buildDropdown("Ethnicity", "Ethnicity"),
+            _buildDropdown("ParentalEducation", "Parental Education"),
+            TextField(
+              controller: _studyTimeController,
+              decoration: InputDecoration(labelText: "Study Time Weekly (0-20 hours)"),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+            ),
+            TextField(
+              controller: _absencesController,
+              decoration: InputDecoration(labelText: "Absences (0-30)"),
+              keyboardType: TextInputType.number,
+            ),
+            _buildDropdown("Tutoring", "Tutoring"),
+            _buildDropdown("ParentalSupport", "Parental Support"),
+            _buildDropdown("Extracurricular", "Extracurricular Activities"),
+            _buildDropdown("Sports", "Sports"),
+            _buildDropdown("Music", "Music"),
+            _buildDropdown("Volunteering", "Volunteering"),
             SizedBox(height: 20),
             ElevatedButton(onPressed: _predict, child: Text("Predict")),
             SizedBox(height: 20),
