@@ -32,7 +32,9 @@ linear_regression_model/
 
 Enhance student academic success by predicting GPA based on key factors, enabling targeted interventions for at-risk students.
 
-**Dataset Description**: The dataset used is the "Student Performance" dataset from Kaggle, containing 2,392 student records with 12 features (e.g., Age, Gender, StudyTimeWeekly, Absences) and GPA as the target variable. It’s rich in volume (thousands of rows) and variety (demographic, academic, and extracurricular variables), sourced from [Kaggle: Student Performance](https://www.kaggle.com/datasets/rabieelkharoua/students-performance-dataset).
+**Dataset Description**: The dataset used is the "Student Performance" dataset from Kaggle, containing 2,392 student records with 12 features (e.g., Age, Gender, StudyTimeWeekly, Absences) and GPA as the target variable. It’s rich in volume (thousands of rows) and variety (demographic, academic, and extracurricular variables). 
+
+**Sourced from**: [Kaggle: Student Performance](https://www.kaggle.com/datasets/rabieelkharoua/students-performance-dataset).
 
 **Visualizations**:
 1. **Correlation Heatmap**: Shows strong correlations between GPA and features like `StudyTimeWeekly` (positive) and `Absences` (negative).
@@ -131,16 +133,6 @@ Enhance student academic success by predicting GPA based on key factors, enablin
   - 12 input fields (10 dropdowns, 2 text fields for `StudyTimeWeekly` and `Absences`).
   - "Predict" button.
   - Output display showing GPA and grade, or error messages.
-  - Modern white theme with organized layout (no overlap).
-
-### UI Details
-- **Home Page**: "Student GPA Predictor" title and a small, round "Start Predicting" button.
-- **Prediction Page**:
-  - Dropdowns for categorical inputs (e.g., `Age: 15-18`, `Gender: Male/Female`).
-  - Text fields for numeric inputs.
-  - Output displays:
-    - GPA and grade in color-coded text (A: dark green, B: light green, C: yellow, D: orange, F: deep red).
-    - Errors in red (e.g., "Please select all dropdown options.").
 
 ### Running Locally
 1. Navigate to `summative/FlutterApp/`.
