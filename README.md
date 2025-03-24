@@ -151,7 +151,7 @@ Enhance student academic success by predicting GPA based on key factors, enablin
 ## Task 4: Video Demo
 
 ### Description
-- **Link**: [YouTube Video URL](https://youtu.be/gYrXbYAJSA8) 
+- **Link**: [Demo Video URL](https://youtu.be/gYrXbYAJSA8) 
 - **Duration**: ~5 minutes
 
 ---
